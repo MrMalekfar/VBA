@@ -1,0 +1,413 @@
+'This code determines the contradiction between bank sheet (b) and company sheet (s) by Mhammad Reza Malekfar.
+' All rights reserved
+Sub ContaradictionBankV2()
+Dim NumP As Long
+Dim NumD As Long
+NumP = 200
+NumD = 50
+Dim ws As Worksheet
+
+Dim col As Long
+
+Dim colDate As Long
+
+Dim sheetName As String
+
+Dim Def As String
+
+'Ask the user to use derault inputs
+
+Def = InputBox("Do you want to use defalts values for sheets name and column's number? y or N")
+
+If Def = "Y" Or Def = "y" Or Def = "Û" Then
+    Bed = InputBox(" For bedehkar contrdiction write D  for bestankar contradiction write C ", "Copy Column")
+    If Bed = "D" Or Bed = "d" Then
+        sheetName = "s"
+        col = 6
+        colDate = 3
+    End If
+    
+    If Bed = "C" Or Bed = "c" Or Bed = "Ò" Then
+        sheetName = "s"
+        col = 7
+        colDate = 3
+    End If
+    'Set the worksheet variable to the sheet name entered by the user
+
+    Set ws = Worksheets(sheetName)
+
+    'Create a new worksheet and copy the column from the selected sheet and paste it in the new sheet
+    If sheetExists("Contradiction") Then
+       
+        Application.DisplayAlerts = False
+        Worksheets("Contradiction").Delete
+        Application.DisplayAlerts = True
+    End If
+    Worksheets.Add
+    ActiveSheet.Name = "Contradiction"
+
+    ws.Columns(col).Copy Worksheets("Contradiction").Columns(1)
+    ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(2)
+    
+    If Bed = "D" Or Bed = "d" Then
+        sheetName = "b"
+        col = 4
+        colDate = 7
+    End If
+    
+    If Bed = "C" Or Bed = "c" Then
+        sheetName = "b"
+        col = 3
+        colDate = 7
+    End If
+    
+    'Set the worksheet variable to the sheet name entered by the user
+
+    Set ws = Worksheets(sheetName)
+
+    ws.Columns(col).Copy Worksheets("Contradiction").Columns(3)
+    ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(4)
+
+Else
+
+'Ask the user to enter the sheet name and the column number to copy
+
+sheetName = InputBox("Input the sheet name of the COMPANY", "Copy Column")
+
+
+
+'Check if the sheet name and the column number are valid
+
+If Not WorksheetExists(sheetName) Then
+
+    sheetName = InputBox("Please input the sheet name of the COMPANY correctly", "Copy Column")
+    If Not WorksheetExists(sheetName) Then
+
+        MsgBox "Invalid sheet name", vbCritical, "Error"
+
+        Exit Sub
+    End If
+
+End If
+
+Worksheets(sheetName).DisplayRightToLeft = True
+
+col = InputBox("Input the column number (bedehkar or bestankar)of the COMPANY", "Copy Column")
+
+If col < 1 Or col > Columns.count Then
+
+    col = InputBox("Please input the column number (bedehkar or bestankar)of the COMPANY correctly", "Copy Column")
+
+    If col < 1 Or col > Columns.count Then
+    
+        MsgBox "Invalid column number", vbCritical, "Error"
+
+        Exit Sub
+        
+    End If
+
+End If
+
+colDate = InputBox("Input the date column number of the COMPANY", "Copy Column")
+
+If colDate < 1 Or colDate > Columns.count Then
+
+    colDate = InputBox("Please input the date column number of the COMPANY correctly", "Copy Column")
+
+    If colDate < 1 Or colDate > Columns.count Then
+    
+        MsgBox "Invalid column number", vbCritical, "Error"
+
+        Exit Sub
+        
+    End If
+
+End If
+
+'Set the worksheet variable to the sheet name entered by the user
+
+Set ws = Worksheets(sheetName)
+
+'Create a new worksheet and copy the column from the selected sheet and paste it in the new sheet
+
+Worksheets.Add
+
+ActiveSheet.Name = "Contradiction"
+
+Worksheets("Contradiction").DisplayRightToLeft = True
+
+ws.Columns(col).Copy Worksheets("Contradiction").Columns(1)
+ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(2)
+
+'Ask the user to enter the sheet name and the column number to copy
+
+sheetName = InputBox("input the sheet name of the BANK", "Copy Column")
+
+
+
+'Check if the sheet name and the column number are valid
+
+If Not WorksheetExists(sheetName) Then
+    
+    sheetName = InputBox("Please input the sheet name of the BANK correctly", "Copy Column")
+    
+    If Not WorksheetExists(sheetName) Then
+
+        MsgBox "Invalid sheet name", vbCritical, "Error"
+
+        Exit Sub
+    End If
+
+End If
+
+col = InputBox("Input the column number (bedehkar or bestankar)of the BANK", "Copy Column")
+
+If col < 1 Or col > Columns.count Then
+
+    col = InputBox("Please input the column number (bedehkar or bestankar)of the BANK correctly", "Copy Column")
+
+    If col < 1 Or col > Columns.count Then
+    
+        MsgBox "Invalid column number", vbCritical, "Error"
+
+        Exit Sub
+        
+    End If
+
+End If
+
+colDate = InputBox("Input the date column number of the BANK", "Copy Column")
+
+If colDate < 1 Or colDate > Columns.count Then
+
+    colDate = InputBox("Please input the date column number of the BANK correctly", "Copy Column")
+
+    If colDate < 1 Or colDate > Columns.count Then
+    
+        MsgBox "Invalid column number", vbCritical, "Error"
+
+        Exit Sub
+        
+    End If
+
+End If
+
+'Set the worksheet variable to the sheet name entered by the user
+
+Set ws = Worksheets(sheetName)
+
+'Create a new worksheet and copy the column from the selected sheet and paste it in the new sheet
+
+ws.Columns(col).Copy Worksheets("Contradiction").Columns(3)
+
+ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(4)
+
+End If
+'------------------------------------------------------------------------------------------------------
+ Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+
+    Dim lrA As Long
+    lrA = Cells(Rows.count, "A").End(xlUp).Row
+    Dim lrC As Long
+    lrC = Cells(Rows.count, "C").End(xlUp).Row
+    Dim rng As Range
+    For Each rng In Range("A2:A" & lrA)
+       If rng.Value = 0 Or Not IsNumeric(rng.Value) Then
+           If Not IsEmpty(rng.Value) Then
+                rng.Value = ""
+                rng.Offset(0, 1).Value = ""
+           End If
+       End If
+    Next
+    For Each rng In Range("C2:C" & lrC)
+        If rng.Value = 0 Or Not IsNumeric(rng.Value) Then
+           If Not IsEmpty(rng.Value) Then
+                rng.Value = ""
+                rng.Offset(0, 1).Value = ""
+           End If
+        End If
+        'If Not IsDate(PersianToDate(rng.Offset(0, 1).Value)) Then
+           'If Not IsEmpty(rng.Offset(0, 1).Value) Then
+                'rng.Value = ""
+                'rng.Offset(0, 1).Value = ""
+           'End If
+        'End If
+    Next
+
+Range("A1:B" & lrA).Sort Key1:=Range("A1"), Order1:=xlDescending, Header:=xlYes
+
+Range("C1:D" & lrC).Sort Key1:=Range("C1"), Order1:=xlDescending, Header:=xlYes
+
+Dim n As Integer
+
+Dim k As Integer
+
+Dim rN As Integer
+
+For Each cell In Range("C2:C" & lrC)
+
+    k = 1
+    
+    If cell.Value = cell.Offset(0, -2).Value And cell.Offset(0, 1).Value <> cell.Offset(0, -1).Value And Not IsEmpty(cell.Offset(0, -2).Value) And cell.Offset(0, -2).Value <> 0 And cell.Value <> 0 And Not IsEmpty(cell.Value) Then
+    
+    n = 1
+    
+    Do
+        If cell.Offset(n, 1).Value = cell.Offset(0, -1).Value Or cell.Offset(0, 1).Value = cell.Offset(n, -1).Value Then
+            If cell.Offset(n, 1).Value = cell.Offset(0, -1).Value Then
+                cell.Offset(0, -1).Resize(n).Insert Shift:=xlDown
+                cell.Offset(0, -2).Resize(n).Insert Shift:=xlDown
+                cell.Offset(0, -1).Resize(n).Interior.Color = vbYellow
+                cell.Offset(0, -2).Resize(n).Interior.Color = vbYellow
+                cell.Resize(n).Interior.Color = vbYellow
+                cell.Offset(0, 1).Resize(n).Interior.Color = vbYellow
+                n = NumD
+            End If
+            If cell.Offset(0, 1).Value = cell.Offset(n, -1).Value Then
+             cell.Resize(n).Insert Shift:=xlDown
+             cell.Offset(-n, 1).Resize(n).Insert Shift:=xlDown
+             cell.Offset(-n, -1).Resize(n).Interior.Color = vbCyan
+             cell.Offset(-n, -2).Resize(n).Interior.Color = vbCyan
+             cell.Offset(-n, 0).Resize(n).Interior.Color = vbCyan
+             cell.Offset(-n, 1).Resize(n).Interior.Color = vbCyan
+             n = NumD
+            End If
+        End If
+
+        n = n + 1
+        
+        k = 1
+        
+    Loop Until n > NumD
+    End If
+    
+
+    If cell.Value <> cell.Offset(0, -2).Value And Not IsEmpty(cell.Offset(0, -2)) Then
+
+    n = 1
+    
+    Do
+        If cell.Offset(n, 0).Value = cell.Offset(0, -2).Value And Not IsEmpty(cell.Offset(0, -2).Value) And cell.Offset(0, -2).Value <> 0 And cell.Value <> 0 And Not IsEmpty(cell.Value) Then
+             cell.Offset(0, -1).Resize(n).Insert Shift:=xlDown
+             cell.Offset(0, -2).Resize(n).Insert Shift:=xlDown
+             cell.Offset(0, -1).Resize(n).Interior.Color = vbYellow
+             cell.Offset(0, -2).Resize(n).Interior.Color = vbYellow
+             cell.Resize(n).Interior.Color = vbYellow
+             cell.Offset(0, 1).Resize(n).Interior.Color = vbYellow
+             n = NumP + 1
+        End If
+        If cell.Value = cell.Offset(n, -2).Value And n <> NumP + 1 And Not IsEmpty(cell.Offset(0, -2).Value) And cell.Offset(0, -2).Value <> 0 And cell.Value <> 0 And Not IsEmpty(cell.Value) Then
+             cell.Resize(n).Insert Shift:=xlDown
+             cell.Offset(-n, 1).Resize(n).Insert Shift:=xlDown
+             cell.Offset(-n, -1).Resize(n).Interior.Color = vbCyan
+             cell.Offset(-n, -2).Resize(n).Interior.Color = vbCyan
+             cell.Offset(-n, 0).Resize(n).Interior.Color = vbCyan
+             cell.Offset(-n, 1).Resize(n).Interior.Color = vbCyan
+             n = NumP + 1
+        End If
+        If cell.Offset(0, 1).Value <> cell.Offset(0, -1).Value And n = NumP And Not IsEmpty(cell.Offset(0, -1).Value) And Not IsEmpty(cell.Offset(0, 1).Value) Then
+            cell.Offset(0, -1).Resize(1).Insert Shift:=xlDown
+            cell.Offset(0, -2).Resize(1).Insert Shift:=xlDown
+            cell.Offset(1, 0).Resize(1).Insert Shift:=xlDown
+            cell.Offset(1, 1).Resize(1).Insert Shift:=xlDown
+            cell.Offset(0, -1).Resize(1).Interior.Color = vbYellow
+            cell.Offset(0, -2).Resize(1).Interior.Color = vbYellow
+            cell.Resize(1).Interior.Color = vbYellow
+            cell.Offset(0, 1).Resize(1).Interior.Color = vbYellow
+            cell.Offset(1, -1).Resize(1).Interior.Color = vbCyan
+            cell.Offset(1, -2).Resize(1).Interior.Color = vbCyan
+            cell.Offset(1, 0).Resize(1).Interior.Color = vbCyan
+            cell.Offset(1, 1).Resize(1).Interior.Color = vbCyan
+        End If
+        
+        n = n + 1
+        
+        k = 1
+        
+    Loop Until n > NumP
+    
+    End If
+
+Next cell
+lrA = Cells(Rows.count, "A").End(xlUp).Row
+lrC = Cells(Rows.count, "C").End(xlUp).Row
+Dim lr As Long
+lr = Max(lrA, lrC)
+Range("E2").Select
+Application.CutCopyMode = False
+ActiveCell.FormulaR1C1 = "=RC[-4]-RC[-2]"
+Range("E2").Select
+Selection.AutoFill Destination:=Range("E2:E" & lr)
+If lrA > lrC Then
+    n = lrA - lrC
+    For k = 1 To n
+    lr = lrC + k
+    Range("A" & lr & ":D" & lr).Interior.Color = vbCyan  'Highlight the cells in row lrC and columns A, B, C, and D with yellow color
+    Next
+End If
+If lrA < lrC Then
+    n = lrC - lrA
+    For k = 1 To n
+    lr = lrA + k
+    Range("A" & lr & ":D" & lr).Interior.Color = vbYellow  'Highlight the cells in row lrC and columns A, B, C, and D with yellow color
+    Next
+End If
+'Activate the worksheet
+'ws.Activate
+    
+'Select the second row
+Rows(2).Select
+    
+'Freeze the first row
+ActiveWindow.FreezePanes = True
+    Rows("1:1").Select
+    Selection.AutoFilter
+    Range("1:1,A:A,C:C,E:E").Select
+    Range("E1").Activate
+    Selection.Style = "Comma"
+    Selection.NumberFormat = "_-* #,##0.0_-;_-* #,##0.0-;_-* ""-""??_-;_-@_-"
+    Selection.NumberFormat = "_-* #,##0_-;_-* #,##0-;_-* ""-""??_-;_-@_-"
+    Worksheets("Contradiction").DisplayRightToLeft = True
+    Worksheets("Contradiction").Cells(1, 1).Value = " ãÈáÛ ÔÑ˜Ê"
+    Worksheets("Contradiction").Cells(1, 2).Value = "ÊÇÑíÎ ÔÑ˜Ê"
+    Worksheets("Contradiction").Cells(1, 3).Value = "ãÈáÛ ÈÇä˜"
+    Worksheets("Contradiction").Cells(1, 4).Value = "ÊÇÑíÎ ÈÇä˜"
+    Worksheets("Contradiction").Cells(1, 5).Value = "ãÛÇíÑÊ ÈÇä˜ æ ÔÑ˜Ê"
+    Worksheets("Contradiction").Range("A1:E1").Interior.ColorIndex = 35
+Application.ScreenUpdating = True
+Application.Calculation = xlCalculationAutomatic
+
+End Sub
+
+'Function to check if a worksheet exists in the workbook
+
+Function WorksheetExists(sheetName As String) As Boolean
+
+Dim ws As Worksheet
+
+On Error Resume Next
+
+Set ws = Worksheets(sheetName)
+
+On Error GoTo 0
+
+WorksheetExists = Not ws Is Nothing
+
+End Function
+
+'Helper function to return the maximum of two numbers
+Function Max(ByVal a As Long, ByVal b As Long) As Long
+    
+    If a > b Then
+        Max = a
+    Else
+        Max = b
+    End If
+    
+End Function
+'Function to check if a sheet exists, based on [^1^][3]
+Function sheetExists(some_sheet As String) As Boolean
+    On Error Resume Next
+    sheetExists = (ActiveWorkbook.Sheets(some_sheet).Index > 0)
+End Function
