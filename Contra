@@ -1,24 +1,19 @@
 'This code determines the contradiction between bank sheet (b) and company sheet (s) by Mhammad Reza Malekfar.
 ' All rights reserved
+'Option Explicit ' Force explicit variable declaration
 Sub ContaradictionBankV2()
 Dim NumP As Long
 Dim NumD As Long
 NumP = 200
 NumD = 50
 Dim ws As Worksheet
-
 Dim col As Long
-
 Dim colDate As Long
-
 Dim sheetName As String
-
 Dim Def As String
 
 'Ask the user to use derault inputs
-
 Def = InputBox("Do you want to use defalts values for sheets name and column's number? y or N")
-
 If Def = "Y" Or Def = "y" Or Def = "Û" Then
     Bed = InputBox(" For bedehkar contrdiction write D  for bestankar contradiction write C ", "Copy Column")
     If Bed = "D" Or Bed = "d" Then
@@ -32,20 +27,18 @@ If Def = "Y" Or Def = "y" Or Def = "Û" Then
         col = 7
         colDate = 3
     End If
+    
     'Set the worksheet variable to the sheet name entered by the user
-
     Set ws = Worksheets(sheetName)
 
     'Create a new worksheet and copy the column from the selected sheet and paste it in the new sheet
     If sheetExists("Contradiction") Then
-       
         Application.DisplayAlerts = False
         Worksheets("Contradiction").Delete
         Application.DisplayAlerts = True
     End If
     Worksheets.Add
     ActiveSheet.Name = "Contradiction"
-
     ws.Columns(col).Copy Worksheets("Contradiction").Columns(1)
     ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(2)
     
@@ -62,144 +55,89 @@ If Def = "Y" Or Def = "y" Or Def = "Û" Then
     End If
     
     'Set the worksheet variable to the sheet name entered by the user
-
     Set ws = Worksheets(sheetName)
-
     ws.Columns(col).Copy Worksheets("Contradiction").Columns(3)
     ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(4)
 
 Else
 
 'Ask the user to enter the sheet name and the column number to copy
-
 sheetName = InputBox("Input the sheet name of the COMPANY", "Copy Column")
 
-
-
 'Check if the sheet name and the column number are valid
-
 If Not WorksheetExists(sheetName) Then
-
     sheetName = InputBox("Please input the sheet name of the COMPANY correctly", "Copy Column")
     If Not WorksheetExists(sheetName) Then
-
         MsgBox "Invalid sheet name", vbCritical, "Error"
-
         Exit Sub
     End If
-
 End If
 
 Worksheets(sheetName).DisplayRightToLeft = True
-
 col = InputBox("Input the column number (bedehkar or bestankar)of the COMPANY", "Copy Column")
 
 If col < 1 Or col > Columns.count Then
-
     col = InputBox("Please input the column number (bedehkar or bestankar)of the COMPANY correctly", "Copy Column")
-
     If col < 1 Or col > Columns.count Then
-    
         MsgBox "Invalid column number", vbCritical, "Error"
-
         Exit Sub
-        
     End If
-
 End If
 
 colDate = InputBox("Input the date column number of the COMPANY", "Copy Column")
-
 If colDate < 1 Or colDate > Columns.count Then
-
     colDate = InputBox("Please input the date column number of the COMPANY correctly", "Copy Column")
-
     If colDate < 1 Or colDate > Columns.count Then
-    
         MsgBox "Invalid column number", vbCritical, "Error"
-
         Exit Sub
-        
     End If
-
 End If
 
 'Set the worksheet variable to the sheet name entered by the user
-
 Set ws = Worksheets(sheetName)
 
 'Create a new worksheet and copy the column from the selected sheet and paste it in the new sheet
-
 Worksheets.Add
-
 ActiveSheet.Name = "Contradiction"
-
 Worksheets("Contradiction").DisplayRightToLeft = True
-
 ws.Columns(col).Copy Worksheets("Contradiction").Columns(1)
 ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(2)
 
 'Ask the user to enter the sheet name and the column number to copy
-
 sheetName = InputBox("input the sheet name of the BANK", "Copy Column")
 
-
-
 'Check if the sheet name and the column number are valid
-
 If Not WorksheetExists(sheetName) Then
-    
     sheetName = InputBox("Please input the sheet name of the BANK correctly", "Copy Column")
-    
     If Not WorksheetExists(sheetName) Then
-
         MsgBox "Invalid sheet name", vbCritical, "Error"
-
         Exit Sub
     End If
-
 End If
 
 col = InputBox("Input the column number (bedehkar or bestankar)of the BANK", "Copy Column")
-
 If col < 1 Or col > Columns.count Then
-
     col = InputBox("Please input the column number (bedehkar or bestankar)of the BANK correctly", "Copy Column")
-
     If col < 1 Or col > Columns.count Then
-    
         MsgBox "Invalid column number", vbCritical, "Error"
-
         Exit Sub
-        
     End If
-
 End If
 
 colDate = InputBox("Input the date column number of the BANK", "Copy Column")
-
 If colDate < 1 Or colDate > Columns.count Then
-
     colDate = InputBox("Please input the date column number of the BANK correctly", "Copy Column")
-
     If colDate < 1 Or colDate > Columns.count Then
-    
         MsgBox "Invalid column number", vbCritical, "Error"
-
         Exit Sub
-        
     End If
-
 End If
 
 'Set the worksheet variable to the sheet name entered by the user
-
 Set ws = Worksheets(sheetName)
 
 'Create a new worksheet and copy the column from the selected sheet and paste it in the new sheet
-
 ws.Columns(col).Copy Worksheets("Contradiction").Columns(3)
-
 ws.Columns(colDate).Copy Worksheets("Contradiction").Columns(4)
 
 End If
@@ -236,23 +174,16 @@ End If
     Next
 
 Range("A1:B" & lrA).Sort Key1:=Range("A1"), Order1:=xlDescending, Header:=xlYes
-
 Range("C1:D" & lrC).Sort Key1:=Range("C1"), Order1:=xlDescending, Header:=xlYes
 
 Dim n As Integer
-
 Dim k As Integer
-
 Dim rN As Integer
 
 For Each cell In Range("C2:C" & lrC)
-
     k = 1
-    
     If cell.Value = cell.Offset(0, -2).Value And cell.Offset(0, 1).Value <> cell.Offset(0, -1).Value And Not IsEmpty(cell.Offset(0, -2).Value) And cell.Offset(0, -2).Value <> 0 And cell.Value <> 0 And Not IsEmpty(cell.Value) Then
-    
     n = 1
-    
     Do
         If cell.Offset(n, 1).Value = cell.Offset(0, -1).Value Or cell.Offset(0, 1).Value = cell.Offset(n, -1).Value Then
             If cell.Offset(n, 1).Value = cell.Offset(0, -1).Value Then
@@ -274,19 +205,13 @@ For Each cell In Range("C2:C" & lrC)
              n = NumD
             End If
         End If
-
         n = n + 1
-        
         k = 1
-        
     Loop Until n > NumD
     End If
-    
 
     If cell.Value <> cell.Offset(0, -2).Value And Not IsEmpty(cell.Offset(0, -2)) Then
-
     n = 1
-    
     Do
         If cell.Offset(n, 0).Value = cell.Offset(0, -2).Value And Not IsEmpty(cell.Offset(0, -2).Value) And cell.Offset(0, -2).Value <> 0 And cell.Value <> 0 And Not IsEmpty(cell.Value) Then
              cell.Offset(0, -1).Resize(n).Insert Shift:=xlDown
@@ -320,13 +245,10 @@ For Each cell In Range("C2:C" & lrC)
             cell.Offset(1, 0).Resize(1).Interior.Color = vbCyan
             cell.Offset(1, 1).Resize(1).Interior.Color = vbCyan
         End If
-        
         n = n + 1
-        
         k = 1
         
     Loop Until n > NumP
-    
     End If
 
 Next cell
@@ -385,13 +307,9 @@ End Sub
 Function WorksheetExists(sheetName As String) As Boolean
 
 Dim ws As Worksheet
-
 On Error Resume Next
-
 Set ws = Worksheets(sheetName)
-
 On Error GoTo 0
-
 WorksheetExists = Not ws Is Nothing
 
 End Function
